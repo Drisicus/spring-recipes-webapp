@@ -1,35 +1,23 @@
 package es.springframework.springrecipeswebapp.controllers;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import es.springframework.springrecipeswebapp.domain.Category;
-import es.springframework.springrecipeswebapp.domain.UnitOfMeasure;
-import es.springframework.springrecipeswebapp.repositories.CategoryRepository;
-import es.springframework.springrecipeswebapp.repositories.UnitOfMeasureReporitory;
+import es.springframework.springrecipeswebapp.services.RecipeService;
 
 @Controller
 public class IndexController {
 
-    private CategoryRepository categoryRepository;
-    private UnitOfMeasureReporitory unitOfMeasureReporitory;
+    private RecipeService recipeService;
 
-    public IndexController(CategoryRepository categoryRepository, UnitOfMeasureReporitory unitOfMeasureReporitory){
-        this.categoryRepository = categoryRepository;
-        this.unitOfMeasureReporitory = unitOfMeasureReporitory;
+    public IndexController(RecipeService recipeService){
+        this.recipeService = recipeService;
     }
 
     @RequestMapping({"", "/", "/index"})
-    public String getIndexPage(){
-
-        Optional<Category> category = categoryRepository.findByDescription("Spanish");
-        category.ifPresent(val -> System.out.println(val.getId() + " " + val.getDescription()));
-
-        Optional<UnitOfMeasure> unitOfMeasure = unitOfMeasureReporitory.findByDescription("Teaspoon");
-        unitOfMeasure.ifPresent(val -> System.out.println(val.getId() + " " + val.getDescription()));
-
+    public String getIndexPage(Model model){
+        model.addAttribute("recipes", recipeService.getRecipes());
         return "index";
     }
 

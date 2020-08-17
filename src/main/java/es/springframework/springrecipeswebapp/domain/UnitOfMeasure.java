@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 @Entity
 public class UnitOfMeasure {
@@ -12,9 +11,6 @@ public class UnitOfMeasure {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToOne
-    private Ingredient ingredient;
 
     private String description;
 
@@ -24,14 +20,6 @@ public class UnitOfMeasure {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Ingredient getIngredient() {
-        return ingredient;
-    }
-
-    public void setIngredient(Ingredient ingredient) {
-        this.ingredient = ingredient;
     }
 
     public String getDescription() {
