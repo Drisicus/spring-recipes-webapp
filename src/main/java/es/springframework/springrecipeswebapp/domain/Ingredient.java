@@ -26,7 +26,7 @@ public class Ingredient {
     private UnitOfMeasure unitOfMeasure;
 
     public Ingredient(){}
-    public Ingredient(Recipe recipe, String description, double amount, UnitOfMeasure unitOfMeasure){
+    public Ingredient(String description, double amount, UnitOfMeasure unitOfMeasure){
         this.recipe = recipe;
         this.description = description;
         this.amount = BigDecimal.valueOf(amount);

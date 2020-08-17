@@ -54,20 +54,19 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 
             guacamole.getCategories().add(mexicanCategory.get());
 
-            Ingredient avocado = new Ingredient(guacamole, "Avocado", 2, unitUOM.get());
-            Ingredient salt = new Ingredient(guacamole, "Salt", 0.25, teaspoonUOM.get());
-            Ingredient chile = new Ingredient(guacamole, "Serrano chiles", 2, unitUOM.get());
-            Ingredient blackPepper = new Ingredient(guacamole, "Black pepper", 1, dashUOM.get());
-            Ingredient cilantro = new Ingredient(guacamole, "Cilantro", 2, tablespoonUOM.get());
+            Ingredient avocado = new Ingredient("Avocado", 2, unitUOM.get());
+            Ingredient salt = new Ingredient("Salt", 0.25, teaspoonUOM.get());
+            Ingredient chile = new Ingredient("Serrano chiles", 2, unitUOM.get());
+            Ingredient blackPepper = new Ingredient("Black pepper", 1, dashUOM.get());
+            Ingredient cilantro = new Ingredient("Cilantro", 2, tablespoonUOM.get());
 
-            guacamole.getIngredients().add(avocado);
-            guacamole.getIngredients().add(salt);
-            guacamole.getIngredients().add(chile);
-            guacamole.getIngredients().add(blackPepper);
-            guacamole.getIngredients().add(cilantro);
+            guacamole.addIngredient(avocado);
+            guacamole.addIngredient(salt);
+            guacamole.addIngredient(chile);
+            guacamole.addIngredient(blackPepper);
+            guacamole.addIngredient(cilantro);
 
             Notes guacamoleNote = new Notes();
-            guacamoleNote.setRecipe(guacamole);
             guacamoleNote.setRecipeNotes("For an extry spicy guacamole put a 1L bottle of tabasco");
             guacamole.setNotes(guacamoleNote);
 
