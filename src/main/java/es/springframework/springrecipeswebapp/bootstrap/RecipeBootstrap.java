@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.transaction.Transactional;
+
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -18,7 +20,9 @@ import es.springframework.springrecipeswebapp.domain.UnitOfMeasure;
 import es.springframework.springrecipeswebapp.repositories.CategoryRepository;
 import es.springframework.springrecipeswebapp.repositories.RecipeRepository;
 import es.springframework.springrecipeswebapp.repositories.UnitOfMeasureReporitory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -33,12 +37,14 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         recipeRepository.saveAll(createRecipes());
     }
 
     private List<Recipe> createRecipes(){
 
+        log.debug("Creating base data...");
         List<Recipe> recipes = new ArrayList<>();
 
         Optional<Category> mexicanCategory = categoryRepository.findByDescription("Mexican");
@@ -79,7 +85,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
             guacamole.setUrl("https://www.not-good-recipes.com/recipes/not_perfect_guacamole/");
 
             recipes.add(guacamole);
-
+            log.debug("... base data created");
         } else {
             throw new RuntimeException("Missing elements for recipe");
         }
