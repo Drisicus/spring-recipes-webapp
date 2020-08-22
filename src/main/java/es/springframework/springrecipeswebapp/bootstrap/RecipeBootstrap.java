@@ -1,26 +1,19 @@
 package es.springframework.springrecipeswebapp.bootstrap;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import javax.transaction.Transactional;
-
+import es.springframework.springrecipeswebapp.domain.*;
+import es.springframework.springrecipeswebapp.repositories.CategoryRepository;
+import es.springframework.springrecipeswebapp.repositories.RecipeRepository;
+import es.springframework.springrecipeswebapp.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import es.springframework.springrecipeswebapp.domain.Category;
-import es.springframework.springrecipeswebapp.domain.Difficulty;
-import es.springframework.springrecipeswebapp.domain.Ingredient;
-import es.springframework.springrecipeswebapp.domain.Notes;
-import es.springframework.springrecipeswebapp.domain.Recipe;
-import es.springframework.springrecipeswebapp.domain.UnitOfMeasure;
-import es.springframework.springrecipeswebapp.repositories.CategoryRepository;
-import es.springframework.springrecipeswebapp.repositories.RecipeRepository;
-import es.springframework.springrecipeswebapp.repositories.UnitOfMeasureReporitory;
-import lombok.extern.slf4j.Slf4j;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @Slf4j
 @Component
@@ -28,12 +21,12 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 
     RecipeRepository recipeRepository;
     CategoryRepository categoryRepository;
-    UnitOfMeasureReporitory unitOfMeasureReporitory;
+    UnitOfMeasureRepository unitOfMeasureRepository;
 
-    public RecipeBootstrap(RecipeRepository recipeRepository, CategoryRepository categoryRepository, UnitOfMeasureReporitory unitOfMeasureReporitory){
+    public RecipeBootstrap(RecipeRepository recipeRepository, CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository){
         this.recipeRepository = recipeRepository;
         this.categoryRepository = categoryRepository;
-        this.unitOfMeasureReporitory = unitOfMeasureReporitory;
+        this.unitOfMeasureRepository = unitOfMeasureRepository;
     }
 
     @Override
@@ -49,10 +42,10 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 
         Optional<Category> mexicanCategory = categoryRepository.findByDescription("Mexican");
 
-        Optional<UnitOfMeasure> tablespoonUOM = unitOfMeasureReporitory.findByDescription("Tablespoon");
-        Optional<UnitOfMeasure> teaspoonUOM = unitOfMeasureReporitory.findByDescription("Teaspoon");
-        Optional<UnitOfMeasure> dashUOM = unitOfMeasureReporitory.findByDescription("Dash");
-        Optional<UnitOfMeasure> unitUOM = unitOfMeasureReporitory.findByDescription("Unit");
+        Optional<UnitOfMeasure> tablespoonUOM = unitOfMeasureRepository.findByDescription("Tablespoon");
+        Optional<UnitOfMeasure> teaspoonUOM = unitOfMeasureRepository.findByDescription("Teaspoon");
+        Optional<UnitOfMeasure> dashUOM = unitOfMeasureRepository.findByDescription("Dash");
+        Optional<UnitOfMeasure> unitUOM = unitOfMeasureRepository.findByDescription("Unit");
 
         boolean allElementsPresent = Stream.of(mexicanCategory, tablespoonUOM, teaspoonUOM, dashUOM, unitUOM).allMatch(Optional::isPresent);
         if(allElementsPresent){
