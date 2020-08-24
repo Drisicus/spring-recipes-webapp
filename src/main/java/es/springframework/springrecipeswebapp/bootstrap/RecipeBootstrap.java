@@ -75,6 +75,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
             guacamole.setDirections("Chop chop chop, put the kitchen on fire, extinguish fire, order online, eat");
             guacamole.setNumberServings(4);
             guacamole.setDescription("Guacamole");
+            guacamole.setSource("Source");
             guacamole.setUrl("https://www.not-good-recipes.com/recipes/not_perfect_guacamole/");
 
             recipes.add(guacamole);
