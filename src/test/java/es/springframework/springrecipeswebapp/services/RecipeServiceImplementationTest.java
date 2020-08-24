@@ -1,20 +1,20 @@
 package es.springframework.springrecipeswebapp.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.HashSet;
-import java.util.Set;
-
+import es.springframework.springrecipeswebapp.domain.Recipe;
+import es.springframework.springrecipeswebapp.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import es.springframework.springrecipeswebapp.domain.Recipe;
-import es.springframework.springrecipeswebapp.repositories.RecipeRepository;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 class RecipeServiceImplementationTest {
 
@@ -44,6 +44,19 @@ class RecipeServiceImplementationTest {
 
         // verify that is called once
         verify(recipeRepository, times(1)).findAll();
+    }
+
+    @Test
+    void getRecipeById(){
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+
+        Recipe recipeReturned = recipeService.findById(1L);
+        assertNotNull(recipeReturned);
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, never()).findAll();
     }
 
 }
