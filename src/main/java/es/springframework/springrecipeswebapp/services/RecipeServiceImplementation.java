@@ -62,7 +62,12 @@ public class RecipeServiceImplementation implements RecipeService {
     @Override
     @Transactional
     public void deleteById(Long id){
-        recipeRepository.deleteById(id);
+        Optional<Recipe> recipe = recipeRepository.findById(id);
+        if(recipe.isPresent()){
+            recipe.get().getIngredients().forEach(ingredient -> ingredient.setRecipe(null));
+            recipe.get().getIngredients().clear();
+            recipeRepository.delete(recipe.get());
+        }
     }
 
 }
