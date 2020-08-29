@@ -66,7 +66,7 @@ public class RecipeServiceImplementation implements RecipeService {
         if(recipe.isPresent()){
             recipe.get().getIngredients().forEach(ingredient -> ingredient.setRecipe(null));
             recipe.get().getIngredients().clear();
-            recipeRepository.delete(recipe.get());
+            recipeRepository.deleteById(id);
         }
     }
 

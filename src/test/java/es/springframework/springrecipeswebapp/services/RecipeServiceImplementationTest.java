@@ -93,6 +93,7 @@ class RecipeServiceImplementationTest {
     @Test
     public void testDeleteById() throws Exception {
         Long idToDelete = 2L;
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(new Recipe()));
         recipeService.deleteById(idToDelete);
         verify(recipeRepository, times(1)).deleteById(any());
     }
