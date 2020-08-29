@@ -10,6 +10,7 @@ import es.springframework.springrecipeswebapp.repositories.UnitOfMeasureReposito
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -78,4 +79,19 @@ public class IngredientServiceImplementation implements IngredientService {
 
         return returnCommand;
     }
+
+    @Override
+    @Transactional
+    public void deleteByRecipeIdAndIngredientId(Long recipeId, Long ingredientId){
+        Optional<Recipe> recipe = recipeRepository.findById(recipeId);
+        if(recipe.isPresent()){
+            Optional<Ingredient> ingredient = recipe.get().getIngredients().stream().filter(ing -> ing.getId().equals(ingredientId)).findFirst();
+            if(ingredient.isPresent()){
+                ingredient.get().setRecipe(null);
+                recipe.get().getIngredients().remove(ingredient.get());
+                recipeRepository.save(recipe.get());
+            }
+        }
+    }
+
 }
