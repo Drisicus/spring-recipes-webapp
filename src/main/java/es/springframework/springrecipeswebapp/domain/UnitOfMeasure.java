@@ -1,13 +1,15 @@
 package es.springframework.springrecipeswebapp.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import lombok.Data;
-
-@Data
+@Getter
+@Setter
 @Entity
 public class UnitOfMeasure {
 

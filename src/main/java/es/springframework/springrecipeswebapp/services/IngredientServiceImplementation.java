@@ -42,29 +42,38 @@ public class IngredientServiceImplementation implements IngredientService {
     }
 
     @Override
-    public IngredientCommand saveIngredientCommand(IngredientCommand command) {
+    public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
 
         IngredientCommand returnCommand = new IngredientCommand();
 
-        Optional<Recipe> recipeOptional = recipeRepository.findById(command.getRecipeId());
+        Optional<Recipe> recipeOptional = recipeRepository.findById(ingredientCommand.getRecipeId());
 
         if(recipeOptional.isPresent()){
             Recipe recipe = recipeOptional.get();
             Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
-                    .filter(ingredient -> ingredient.getId().equals(command.getId())).findFirst();
+                    .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId())).findFirst();
 
             if(ingredientOptional.isPresent()){
-                ingredientOptional.get().setDescription(command.getDescription());
-                ingredientOptional.get().setAmount(command.getAmount());
-                ingredientOptional.get().setUnitOfMeasure(unitOfMeasureRepository.findById(command.getUnitOfMeasure().getId())
+                ingredientOptional.get().setDescription(ingredientCommand.getDescription());
+                ingredientOptional.get().setAmount(ingredientCommand.getAmount());
+                ingredientOptional.get().setUnitOfMeasure(unitOfMeasureRepository.findById(ingredientCommand.getUnitOfMeasure().getId())
                 .orElseThrow(() -> new RuntimeException("Unit of measure not found")));
             } else{
-                recipe.addIngredient(Objects.requireNonNull(ingredientCommandToIngredient.convert(command)));
+                Ingredient ingredient = ingredientCommandToIngredient.convert(ingredientCommand);
+                ingredient.setRecipe(recipe);
+                recipe.addIngredient(ingredient);
             }
 
+            // Id for the new ingredient is created in the "save" operation if is new
             Recipe savedRecipe = recipeRepository.save(recipe);
-            returnCommand = ingredientToIngredientCommand.convert(savedRecipe.getIngredients().stream()
-                .filter(recipeIngredients -> recipeIngredients.getId().equals(command.getId())).findFirst().get());
+
+            Ingredient ingredientToConvert = savedRecipe.getIngredients().stream()
+                    .filter(recipeIngredient -> Objects.equals(recipeIngredient.getDescription(), ingredientCommand.getDescription())
+                            && Objects.equals(recipeIngredient.getAmount(), ingredientCommand.getAmount())
+                            && Objects.equals(recipeIngredient.getUnitOfMeasure().getId(), ingredientCommand.getUnitOfMeasure().getId())
+                    ).findFirst().get();
+
+            returnCommand = ingredientToIngredientCommand.convert(ingredientToConvert);
         }
 
         return returnCommand;
