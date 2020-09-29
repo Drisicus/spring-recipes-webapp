@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 @Controller
 public class ImageController {
@@ -43,16 +44,17 @@ public class ImageController {
     @GetMapping("recipe/{recipeId}/recipeimage")
     public void renderImageFromDB(@PathVariable String recipeId, HttpServletResponse response) throws IOException {
         RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(recipeId));
-        byte[] byteArray = new byte[recipeCommand.getImage().length];
-
-        int index = 0;
-        for(Byte wrappedByte : recipeCommand.getImage()){
-            byteArray[index] = wrappedByte;
-            index++;
+        if(Objects.nonNull(recipeCommand.getImage())){
+            byte[] byteArray = new byte[recipeCommand.getImage().length];
+            int index = 0;
+            for(Byte wrappedByte : recipeCommand.getImage()){
+                byteArray[index] = wrappedByte;
+                index++;
+            }
+            response.setContentType("image/jpeg");
+            InputStream inputStream = new ByteArrayInputStream(byteArray);
+            IOUtils.copy(inputStream, response.getOutputStream());
         }
-        response.setContentType("image/jpeg");
-        InputStream inputStream = new ByteArrayInputStream(byteArray);
-        IOUtils.copy(inputStream, response.getOutputStream());
     }
 
 }
