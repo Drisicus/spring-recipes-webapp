@@ -40,7 +40,7 @@ public class RecipeServiceImplementation implements RecipeService {
     public Recipe findById(Long id){
         Optional<Recipe> recipeOptional = recipeRepository.findById(id);
         if(recipeOptional.isEmpty()){
-            throw new NotFoundException("\n---Recipe not found---\n");
+            throw new NotFoundException("\n---Recipe not found with ID: " + id + "---\n");
         }
         return recipeOptional.get();
     }
