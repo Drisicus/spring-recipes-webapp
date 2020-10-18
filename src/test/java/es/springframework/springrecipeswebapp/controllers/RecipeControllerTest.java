@@ -126,8 +126,9 @@ class RecipeControllerTest {
 
         mockMvc.perform(post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("id", ""))
-                .andExpect(status().isOk())
+                .param("id", "")
+                .param("cookingTime", "3000")
+        ).andExpect(status().isOk())
                 .andExpect(model().attributeExists("recipe"))
                 .andExpect(view().name("recipe/recipeform"));
     }
