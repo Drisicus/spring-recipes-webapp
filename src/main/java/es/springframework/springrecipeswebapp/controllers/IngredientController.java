@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Set;
+
 @Controller
 public class IngredientController {
 
@@ -51,14 +53,14 @@ public class IngredientController {
         ingredientCommand.setUnitOfMeasure(new UnitOfMeasureCommand());
         model.addAttribute("ingredient", ingredientCommand);
 
-        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+//        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
         return "recipe/ingredient/ingredientform";
     }
 
     @GetMapping("/recipe/{recipeId}/ingredient/{ingredientId}/update")
     public String updateRecipeIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model){
         model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(ingredientId)));
-        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+//        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
         return "recipe/ingredient/ingredientform";
     }
 
@@ -74,6 +76,11 @@ public class IngredientController {
         ingredientService.deleteByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(ingredientId));
         model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(recipeId)));
         return "redirect:/recipe/" + recipeId + "/ingredients";
+    }
+
+    @ModelAttribute("uomList")
+    public Set<UnitOfMeasureCommand> populateUnitOfMeasures(){
+        return unitOfMeasureService.listAllUoms();
     }
 
 }
